@@ -40,7 +40,7 @@ $user_name = 'Alexey Lyapin'; // укажите здесь ваше имя
             </div>
         </form>
         <div class="header__nav-wrapper">
-            <?php if($is_auth==1): ?>
+            <?php if($is_auth): ?>
             <nav class="header__nav">
                 <ul class="header__my-nav">
                     <li class="header__my-page header__my-page--popular">
@@ -69,6 +69,7 @@ $user_name = 'Alexey Lyapin'; // укажите здесь ваше имя
                             <div class="header__profile-name">
                                 <span>
                                     <!--здесь должно быть имя пользователя-->
+                                    <?=$user_name?>
                                 </span>
                                 <svg class="header__link-arrow" width="10" height="6">
                                     <use xlink:href="#icon-arrow-right-ad"></use>
