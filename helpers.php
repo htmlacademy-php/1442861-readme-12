@@ -23,7 +23,7 @@ function is_date_valid(string $date): bool
 
 /**
  * Создает подготовленное выражение на основе готового SQL запроса и переданных данных
- *
+ *  
  * @param $link mysqli Ресурс соединения
  * @param $sql string SQL запрос с плейсхолдерами вместо значений
  * @param array $data Данные для вставки на место плейсхолдеров
@@ -261,4 +261,28 @@ function generate_random_date($index)
     $dt = date('Y-m-d H:i:s', $ts);
 
     return $dt;
+}
+
+
+/**
+ * @param string $long_content Строка, которую нужно сократить
+ * @param int $max_length Максимальная длина строки
+ * @return string Возвращает укороченный вариант строки, если длина превышает максимальную
+ */
+
+function cutContent(string $long_content, int $max_length = 300): string
+{
+
+    if (mb_strlen($long_content) <= $max_length) {
+        return $long_content;
+    }
+    $long_content = explode(' ', $long_content);
+    $current_length = 0;
+    $counter = 0;
+
+    while ($current_length <= $max_length) {
+        $word = $long_content[$counter++];
+        $current_length += (mb_strlen($word) + 1);
+    }
+    return implode(' ', array_slice($long_content, 0, $counter - 1)) . '...';
 }
