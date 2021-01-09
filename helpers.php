@@ -135,10 +135,6 @@ function include_template($name, array $data = [])
     $name = 'templates/' . $name;
     $result = '';
 
-    if (!is_readable($name)) {
-        return $result;
-    }
-
     ob_start();
     extract($data);
     require $name;
@@ -285,4 +281,9 @@ function cutContent(string $long_content, int $max_length = 300): string
         $current_length += (mb_strlen($word) + 1);
     }
     return implode(' ', array_slice($long_content, 0, $counter - 1)) . '...';
+}
+
+function s($input)
+{
+    return htmlspecialchars($input, ENT_QUOTES, null, false);
 }
