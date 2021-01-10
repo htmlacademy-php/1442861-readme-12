@@ -1,4 +1,6 @@
 <?php
+require_once('init.php');
+require_once('helpers.php');
 $is_auth = rand(0, 1);
 
 $user_name = 'Alexey Lyapin'; // укажите здесь ваше имя
@@ -11,6 +13,7 @@ $posts =
             'content' => 'Мы в жизни любим только раз, а после ищем лишь похожих',
             'username' => 'Лариса',
             'avatar' => 'userpic-larisa-small.jpg',
+            'date' => generate_random_date(0),
         ],
         [
             'header' => 'Игра престолов',
@@ -18,6 +21,7 @@ $posts =
             'content' => 'Озеро Байкал – огромное древнее озеро в горах Сибири к северу от монгольской границы. Байкал считается самым глубоким озером в мире. Он окружен сетью пешеходных маршрутов, называемых Большой байкальской тропой. Деревня Листвянка, расположенная на западном берегу озера, – популярная отправная точка для летних экскурсий. Зимой здесь можно кататься на коньках и собачьих упряжках. ',
             'username' => 'Владик',
             'avatar' => 'userpic.jpg',
+            'date' => generate_random_date(1),
         ],
         [
             'header' => 'Наконец, обработал фотки!',
@@ -25,6 +29,7 @@ $posts =
             'content' => 'rock-medium.jpg',
             'username' => 'Виктор',
             'avatar' => 'userpic-mark.jpg',
+            'date' => generate_random_date(2),
         ],
         [
             'header' => 'Моя мечта',
@@ -32,6 +37,7 @@ $posts =
             'content' => 'coast-medium.jpg',
             'username' => 'Лариса',
             'avatar' => 'userpic-larisa-small.jpg',
+            'date' => generate_random_date(3),
         ],
         [
             'header' => 'Лучшие курсы',
@@ -39,11 +45,12 @@ $posts =
             'content' => 'www.htmlacademy.ru',
             'username' => 'Владик',
             'avatar' => 'userpic.jpg',
+            'date' => generate_random_date(4),
         ],
 
     ];
 
-require_once('helpers.php');
+
 
 $content = include_template('main.php',['posts' => $posts]);
 $page = include_template('layout.php', ['content' => $content, 'page_name' => 'Главная страница','is_auth' => $is_auth, 'user_name' =>$user_name,]);
