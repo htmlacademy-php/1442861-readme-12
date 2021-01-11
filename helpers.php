@@ -294,18 +294,20 @@ function time_ago ($val_date)
     $cur_date = date_create('now');
     $sub_date = date_create($val_date);
     $diff = date_diff($cur_date, $sub_date);
-    $sec_diff = date_timestamp_get($cur_date) - date_timestamp_get($sub_date);
 
-    if ($sec_diff >= 3024000) {
+    if ($diff->y >0) {
+        $unit = $diff->y;
+        $noun = get_noun_plural_form($unit, 'год', 'года', 'лет');
+    } elseif ($diff->m >0) {
         $unit = $diff->m;
-        $noun = get_noun_plural_form($unit, 'месяц', 'месяца', 'месяцев');
-    } elseif ($sec_diff >= 604800) {
+        $noun = get_noun_plural_form($unit, 'месяц', 'месяца', 'месяцев');    
+    } elseif ($diff->d > 7) {
         $unit = intdiv($diff->days, 7);
         $noun = get_noun_plural_form($unit, 'неделя', 'недели', 'недель');
-    } elseif ($sec_diff >= 86400) {
+    } elseif ($diff->d > 0) {
         $unit = $diff->d;
         $noun = get_noun_plural_form($unit, 'день', 'дня', 'дней');
-    } elseif ($sec_diff >= 3600) {
+    } elseif ($diff->h >0) {
         $unit = $diff->h;
         $noun = get_noun_plural_form($unit, 'час', 'часа', 'часов');
     } else {
