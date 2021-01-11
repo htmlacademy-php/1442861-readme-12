@@ -312,6 +312,6 @@ function time_ago ($val_date)
         $unit = $diff->i;
         $noun = get_noun_plural_form($unit, 'минута', 'минуты', 'минут');
     }
-    return print_r("$unit $noun назад");
+    return $unit." ".$noun." назад";
        
 }

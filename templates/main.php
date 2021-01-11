@@ -144,7 +144,7 @@
                                     </div>
                                     <div class="post__info">
                                         <b class="post__author-name"><?= s($post['username']) ?></b>
-                                        <time class="post__time" datetime="<?=s($post['date'])?>" title = "<?=s(date('d.m.Y H:i',strtotime($post['date'])))?>"><?php s(time_ago($post['date']))?></time>
+                                        <time class="post__time" datetime="<?=s($post['date'])?>" title = "<?=s(date('d.m.Y H:i',strtotime($post['date'])))?>"><?= s(time_ago($post['date']))?></time>
                                     </div>
                                 </a>
                             </div>
