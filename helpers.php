@@ -287,3 +287,33 @@ function s($input)
 {
     return htmlspecialchars($input, ENT_QUOTES, null, false);
 }
+
+
+function time_ago ($val_date)
+{
+    $cur_date = date_create('now');
+    $sub_date = date_create($val_date);
+    $diff = date_diff($cur_date, $sub_date);
+
+    if ($diff->y >0) {
+        $unit = $diff->y;
+        $noun = get_noun_plural_form($unit, 'год', 'года', 'лет');
+    } elseif ($diff->m >0) {
+        $unit = $diff->m;
+        $noun = get_noun_plural_form($unit, 'месяц', 'месяца', 'месяцев');    
+    } elseif ($diff->d > 7) {
+        $unit = intdiv($diff->days, 7);
+        $noun = get_noun_plural_form($unit, 'неделя', 'недели', 'недель');
+    } elseif ($diff->d > 0) {
+        $unit = $diff->d;
+        $noun = get_noun_plural_form($unit, 'день', 'дня', 'дней');
+    } elseif ($diff->h >0) {
+        $unit = $diff->h;
+        $noun = get_noun_plural_form($unit, 'час', 'часа', 'часов');
+    } else {
+        $unit = $diff->i;
+        $noun = get_noun_plural_form($unit, 'минута', 'минуты', 'минут');
+    }
+    return $unit." ".$noun." назад";
+       
+}
