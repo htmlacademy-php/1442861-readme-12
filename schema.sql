@@ -11,56 +11,61 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema readme
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `readme` DEFAULT CHARACTER SET utf8 ;
+CREATE SCHEMA IF NOT EXISTS `readme` DEFAULT CHARACTER SET utf8mb4 ;
 USE `readme` ;
 
 -- -----------------------------------------------------
 -- Table `readme`.`user`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `readme`.`user` ;
+
 CREATE TABLE IF NOT EXISTS `readme`.`user` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `reg_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `email` VARCHAR(128) NOT NULL,
   `username` VARCHAR(128) NOT NULL,
   `password` VARCHAR(128) NOT NULL,
-  `avatar` TEXT NULL DEFAULT NULL,
+  `avatar` VARCHAR(128) NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `email` (`email` ASC),
-  UNIQUE INDEX `username` (`username` ASC))
+  UNIQUE INDEX `email` (`email` ASC))
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
 -- Table `readme`.`content_type`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `readme`.`content_type` ;
+
 CREATE TABLE IF NOT EXISTS `readme`.`content_type` (
-  `content_id` INT(11) NOT NULL AUTO_INCREMENT,
-  `content_title` VARCHAR(128) NOT NULL,
-  `content_icon` VARCHAR(128) NOT NULL,
-  PRIMARY KEY (`content_id`),
-  UNIQUE INDEX `content_title_UNIQUE` (`content_title` ASC),
-  UNIQUE INDEX `content_icon_UNIQUE` (`content_icon` ASC))
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `type` VARCHAR(128) NOT NULL,
+  `icon` VARCHAR(128) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `type_UNIQUE` (`type` ASC),
+  UNIQUE INDEX `icon_UNIQUE` (`icon` ASC))
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
 -- Table `readme`.`post`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `readme`.`post` ;
+
 CREATE TABLE IF NOT EXISTS `readme`.`post` (
-  `post_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
   `date_created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `title` CHAR(100) NOT NULL,
+  `title` VARCHAR(128) NOT NULL,
   `content_text` TEXT NULL DEFAULT NULL,
-  `cite_author` CHAR(100) NULL DEFAULT NULL,
+  `cite_author` VARCHAR(128) NULL DEFAULT NULL,
   `content_image` VARCHAR(128) NULL DEFAULT NULL,
   `content_video` VARCHAR(128) NULL DEFAULT NULL,
   `content_link` VARCHAR(128) NULL DEFAULT NULL,
   `views` INT(11) NULL DEFAULT NULL,
   `user_id` INT(11) NOT NULL,
   `content_type_id` INT(11) NOT NULL,
-  PRIMARY KEY (`post_id`),
+  PRIMARY KEY (`id`),
   INDEX `fk_post_user1_idx` (`user_id` ASC),
   INDEX `fk_post_content_type1_idx` (`content_type_id` ASC),
   CONSTRAINT `fk_post_user1`
@@ -70,23 +75,25 @@ CREATE TABLE IF NOT EXISTS `readme`.`post` (
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_post_content_type1`
     FOREIGN KEY (`content_type_id`)
-    REFERENCES `readme`.`content_type` (`content_id`)
+    REFERENCES `readme`.`content_type` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
 -- Table `readme`.`comment`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `readme`.`comment` ;
+
 CREATE TABLE IF NOT EXISTS `readme`.`comment` (
-  `comment_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
   `date_created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `content` TEXT NULL DEFAULT NULL,
+  `content` TEXT NOT NULL,
   `user_id` INT(11) NOT NULL,
   `post_id` INT(11) NOT NULL,
-  PRIMARY KEY (`comment_id`),
+  PRIMARY KEY (`id`),
   INDEX `fk_comment_user1_idx` (`user_id` ASC),
   INDEX `fk_comment_post1_idx` (`post_id` ASC),
   CONSTRAINT `fk_comment_user1`
@@ -96,35 +103,40 @@ CREATE TABLE IF NOT EXISTS `readme`.`comment` (
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_comment_post1`
     FOREIGN KEY (`post_id`)
-    REFERENCES `readme`.`post` (`post_id`)
+    REFERENCES `readme`.`post` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
 -- Table `readme`.`hashtag`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `readme`.`hashtag` ;
+
 CREATE TABLE IF NOT EXISTS `readme`.`hashtag` (
-  `hashtag_id` INT(11) NOT NULL AUTO_INCREMENT,
-  `hashtag_name` VARCHAR(128) NOT NULL,
-  PRIMARY KEY (`hashtag_id`),
-  UNIQUE INDEX `hashtag_name_UNIQUE` (`hashtag_name` ASC))
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(128) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `hashtag_name_UNIQUE` (`name` ASC))
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
--- Table `readme`.`liketag`
+-- Table `readme`.`like_post`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `readme`.`liketag` (
-  `like_id` INT(11) NOT NULL AUTO_INCREMENT,
+DROP TABLE IF EXISTS `readme`.`like_post` ;
+
+CREATE TABLE IF NOT EXISTS `readme`.`like_post` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
   `user_id` INT(11) NOT NULL,
   `post_id` INT(11) NOT NULL,
-  PRIMARY KEY (`like_id`),
+  PRIMARY KEY (`id`),
   INDEX `fk_liketag_user1_idx` (`user_id` ASC),
   INDEX `fk_liketag_post1_idx` (`post_id` ASC),
+  UNIQUE INDEX `user_post_unique` (`user_id` ASC, `post_id` ASC),
   CONSTRAINT `fk_liketag_user1`
     FOREIGN KEY (`user_id`)
     REFERENCES `readme`.`user` (`id`)
@@ -132,23 +144,25 @@ CREATE TABLE IF NOT EXISTS `readme`.`liketag` (
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_liketag_post1`
     FOREIGN KEY (`post_id`)
-    REFERENCES `readme`.`post` (`post_id`)
+    REFERENCES `readme`.`post` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
 -- Table `readme`.`message`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `readme`.`message` ;
+
 CREATE TABLE IF NOT EXISTS `readme`.`message` (
-  `message_id` INT(11) NOT NULL AUTO_INCREMENT,
-  `message_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `date_created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `content` TEXT NOT NULL,
   `sender_id` INT(11) NOT NULL,
   `receiver_id` INT(11) NOT NULL,
-  PRIMARY KEY (`message_id`),
+  PRIMARY KEY (`id`),
   INDEX `fk_message_user1_idx` (`sender_id` ASC),
   INDEX `fk_message_user2_idx` (`receiver_id` ASC),
   CONSTRAINT `fk_message_user1`
@@ -162,52 +176,60 @@ CREATE TABLE IF NOT EXISTS `readme`.`message` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
 -- Table `readme`.`subscription`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `readme`.`subscription` ;
+
 CREATE TABLE IF NOT EXISTS `readme`.`subscription` (
-  `subscript_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
   `user_id` INT(11) NOT NULL,
-  PRIMARY KEY (`subscript_id`),
-  INDEX `fk_subscription_user1_idx` (`user_id` ASC),
+  `subscriber_id` INT(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_subscription_user1_idx` (`subscriber_id` ASC),
+  UNIQUE INDEX `subscription_unique` (`user_id` ASC, `subscriber_id` ASC),
   CONSTRAINT `fk_subscription_user1`
     FOREIGN KEY (`user_id`)
     REFERENCES `readme`.`user` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_subscription_user2`
-    FOREIGN KEY (`user_id`)
+    FOREIGN KEY (`subscriber_id`)
     REFERENCES `readme`.`user` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
--- Table `readme`.`post_has_hashtag`
+-- Table `readme`.`hashtag_post`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `readme`.`post_has_hashtag` (
-  `post_post_id` INT(11) NOT NULL,
-  `hashtag_hashtag_id` INT(11) NOT NULL,
-  PRIMARY KEY (`post_post_id`, `hashtag_hashtag_id`),
-  INDEX `fk_post_has_hashtag_hashtag1_idx` (`hashtag_hashtag_id` ASC),
-  INDEX `fk_post_has_hashtag_post1_idx` (`post_post_id` ASC),
+DROP TABLE IF EXISTS `readme`.`hashtag_post` ;
+
+CREATE TABLE IF NOT EXISTS `readme`.`hashtag_post` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `post_id` INT(11) NOT NULL,
+  `hashtag_id` INT(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_post_has_hashtag_hashtag1_idx` (`hashtag_id` ASC),
+  INDEX `fk_post_has_hashtag_post1_idx` (`post_id` ASC),
+  UNIQUE INDEX `post_hashtag` (`post_id` ASC, `hashtag_id` ASC),
   CONSTRAINT `fk_post_has_hashtag_post1`
-    FOREIGN KEY (`post_post_id`)
-    REFERENCES `readme`.`post` (`post_id`)
+    FOREIGN KEY (`post_id`)
+    REFERENCES `readme`.`post` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_post_has_hashtag_hashtag1`
-    FOREIGN KEY (`hashtag_hashtag_id`)
-    REFERENCES `readme`.`hashtag` (`hashtag_id`)
+    FOREIGN KEY (`hashtag_id`)
+    REFERENCES `readme`.`hashtag` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+DEFAULT CHARACTER SET = utf8mb4;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
