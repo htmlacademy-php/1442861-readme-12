@@ -136,7 +136,7 @@ function include_template($name, array $data = [])
     $result = '';
 
     ob_start();
-    extract($data);
+    extract($data); 
     require $name;
 
     $result = ob_get_clean();
@@ -316,4 +316,22 @@ function time_ago ($val_date)
     }
     return $unit." ".$noun." назад";
        
+}
+
+/**
+ * @param mysqli $db БД MySQL, к которой будет направлен запрос
+ * @param string $sql_query Подготовленное выражение-запрос 
+ * @param array $placeholders Массив плейсхолдеров для вставки в запрос
+ * @return mysqli_stmt Возвращает результат исполнения подготовленного выражения
+ */
+
+function prepare_statement(mysqli $db, string $sql_query, array $placeholders): mysqli_stmt
+{
+    $stmt = $db->prepare($sql_query);
+    $phds_count = count($placeholders);
+
+    $stmt->bind_param(str_repeat('s', $phds_count), ...$placeholders);
+    $stmt->execute();
+
+    return $stmt;
 }

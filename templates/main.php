@@ -40,46 +40,18 @@
                                 <span>Все</span>
                             </a>
                         </li>
+
+                        <?php foreach ($types as $type):?>
                         <li class="popular__filters-item filters__item">
-                            <a class="filters__button filters__button--photo button" href="#">
-                                <span class="visually-hidden">Фото</span>
-                                <svg class="filters__icon" width="22" height="18">
-                                    <use xlink:href="#icon-filter-photo"></use>
+                            <a class="filters__button filters__button--<?=s($type['icon'])?> button" href="#">
+                                <span class="visually-hidden"><?=s($type['type'])?></span>
+                                <svg class="filters__icon" width="40%" height="40%">
+                                    <use xlink:href="#icon-filter-<?=s($type['icon'])?>"></use>
                                 </svg>
                             </a>
                         </li>
-                        <li class="popular__filters-item filters__item">
-                            <a class="filters__button filters__button--video button" href="#">
-                                <span class="visually-hidden">Видео</span>
-                                <svg class="filters__icon" width="24" height="16">
-                                    <use xlink:href="#icon-filter-video"></use>
-                                </svg>
-                            </a>
-                        </li>
-                        <li class="popular__filters-item filters__item">
-                            <a class="filters__button filters__button--text button" href="#">
-                                <span class="visually-hidden">Текст</span>
-                                <svg class="filters__icon" width="20" height="21">
-                                    <use xlink:href="#icon-filter-text"></use>
-                                </svg>
-                            </a>
-                        </li>
-                        <li class="popular__filters-item filters__item">
-                            <a class="filters__button filters__button--quote button" href="#">
-                                <span class="visually-hidden">Цитата</span>
-                                <svg class="filters__icon" width="21" height="20">
-                                    <use xlink:href="#icon-filter-quote"></use>
-                                </svg>
-                            </a>
-                        </li>
-                        <li class="popular__filters-item filters__item">
-                            <a class="filters__button filters__button--link button" href="#">
-                                <span class="visually-hidden">Ссылка</span>
-                                <svg class="filters__icon" width="21" height="18">
-                                    <use xlink:href="#icon-filter-link"></use>
-                                </svg>
-                            </a>
-                        </li>
+                        <?php endforeach;?>
+
                     </ul>
                 </div>
             </div>
@@ -87,7 +59,7 @@
 
                 <?php foreach ($posts as $post) : ?>
 
-                    <article class="popular__post post <?= $post['type'] ?>">
+                    <article class="popular__post post <?= s($post['type']) ?>">
                         <header class="post__header">
                             <h2><?= s($post['header']) ?></h2>
                         </header>
@@ -97,14 +69,14 @@
                             <?php if ($post['type'] === 'post-quote') : ?>
                                 <blockquote>
                                     <p>
-                                        <?= s($post['content']) ?>
+                                        <?= s($post['content_text']) ?>
                                     </p>
-                                    <cite>Неизвестный Автор</cite>
+                                    <cite><?=s($post['cite_author'])?></cite>
                                 </blockquote>
 
                             <?php elseif ($post['type'] === 'post-link') : ?>
                                 <div class="post-link__wrapper">
-                                    <a class="post-link__external" href="http://<?= s($post['content']) ?>" title="Перейти по ссылке">
+                                    <a class="post-link__external" href="http://<?= s($post['content_media']) ?>" title="Перейти по ссылке">
                                         <div class="post-link__info-wrapper">
                                             <div class="post-link__icon-wrapper">
                                                 <img src="https://www.google.com/s2/favicons?domain=vitadental.ru" alt="Иконка">
@@ -113,21 +85,21 @@
                                                 <h3><?= s($post['header']) ?></h3>
                                             </div>
                                         </div>
-                                        <span><?= s($post['content']) ?></span>
+                                        <span><?= s($post['content_media']) ?></span>
                                     </a>
                                 </div>
 
                             <?php elseif ($post['type'] === 'post-photo') : ?>
 
                                 <div class="post-photo__image-wrapper">
-                                    <img src="img/<?= s($post['content']) ?>" alt="Фото от пользователя" width="360" height="240">
+                                    <img src="img/<?= s($post['content_media']) ?>" alt="Фото от пользователя" width="360" height="240">
                                 </div>
 
                             <?php else : ?>
 
 
-                                <p><?= s(cutContent($post['content'])) ?></p>
-                                <?php if (cutContent($post['content']) != $post['content']) : ?>
+                                <p><?= s(cutContent($post['content_text'])) ?></p>
+                                <?php if (cutContent($post['content_text']) != $post['content_text']) : ?>
                                     <a class="post-text__more-link" href="#">Читать далее</a>
                                 <?php endif ?>
 
@@ -144,7 +116,7 @@
                                     </div>
                                     <div class="post__info">
                                         <b class="post__author-name"><?= s($post['username']) ?></b>
-                                        <time class="post__time" datetime="<?=s($post['date'])?>" title = "<?=s(date('d.m.Y H:i',strtotime($post['date'])))?>"><?= s(time_ago($post['date']))?></time>
+                                        <time class="post__time" datetime="<?=s($post['date_created'])?>" title = "<?=s(date('d.m.Y H:i',strtotime(s($post['date_created']))))?>"><?= s(time_ago($post['date_created']))?></time>
                                     </div>
                                 </a>
                             </div>
@@ -157,7 +129,7 @@
                                         <svg class="post__indicator-icon post__indicator-icon--like-active" width="20" height="17">
                                             <use xlink:href="#icon-heart-active"></use>
                                         </svg>
-                                        <span>0</span>
+                                        <span><?=s($post['views'])?></span>
                                         <span class="visually-hidden">количество лайков</span>
                                     </a>
                                     <a class="post__indicator post__indicator--comments button" href="#" title="Комментарии">

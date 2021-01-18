@@ -1,57 +1,32 @@
 <?php
-require_once('init.php');
-require_once('helpers.php');
+require('init.php');
+require('helpers.php');
+if (!file_exists('config.php'))
+{
+    trigger_error('Создайте файл config.php на основе config.sample.php и внесите туда настройки сервера MySQL',E_USER_ERROR);
+}
+$config = require('config.php');
 $is_auth = rand(0, 1);
-
 $user_name = 'Alexey Lyapin'; // укажите здесь ваше имя
 
-$posts =
-    [
-        [
-            'header' => 'Цитата',
-            'type'  => 'post-quote',
-            'content' => 'Мы в жизни любим только раз, а после ищем лишь похожих',
-            'username' => 'Лариса',
-            'avatar' => 'userpic-larisa-small.jpg',
-            'date' => generate_random_date(0),
-        ],
-        [
-            'header' => 'Игра престолов',
-            'type'  => 'post-text',
-            'content' => 'Озеро Байкал – огромное древнее озеро в горах Сибири к северу от монгольской границы. Байкал считается самым глубоким озером в мире. Он окружен сетью пешеходных маршрутов, называемых Большой байкальской тропой. Деревня Листвянка, расположенная на западном берегу озера, – популярная отправная точка для летних экскурсий. Зимой здесь можно кататься на коньках и собачьих упряжках. ',
-            'username' => 'Владик',
-            'avatar' => 'userpic.jpg',
-            'date' => generate_random_date(1),
-        ],
-        [
-            'header' => 'Наконец, обработал фотки!',
-            'type'  => 'post-photo',
-            'content' => 'rock-medium.jpg',
-            'username' => 'Виктор',
-            'avatar' => 'userpic-mark.jpg',
-            'date' => generate_random_date(2),
-        ],
-        [
-            'header' => 'Моя мечта',
-            'type'  => 'post-photo',
-            'content' => 'coast-medium.jpg',
-            'username' => 'Лариса',
-            'avatar' => 'userpic-larisa-small.jpg',
-            'date' => generate_random_date(3),
-        ],
-        [
-            'header' => 'Лучшие курсы',
-            'type'  => 'post-link',
-            'content' => 'www.htmlacademy.ru',
-            'username' => 'Владик',
-            'avatar' => 'userpic.jpg',
-            'date' => generate_random_date(4),
-        ],
 
-    ];
+mysqli_report(MYSQLI_REPORT_ERROR| MYSQLI_REPORT_STRICT);
+$db = new mysqli(...array_values($config['db']));
+$db->set_charset("utf8mb4");
+
+$sql_types = 'select type,icon from content_type';
+$types = $db->query($sql_types)->fetch_all(MYSQLI_ASSOC);
 
 
+$sql_posts = 'SELECT date_created, header, type, content_text,cite_author,content_media,views, avatar,username 
+    FROM post 
+    JOIN user ON user_id = user.id 
+    JOIN content_type ON content_type_id = content_type.id 
+    ORDER BY views DESC LIMIT 6';
 
-$content = include_template('main.php',['posts' => $posts]);
+$posts = $db->query($sql_posts)->fetch_all(MYSQLI_ASSOC);
+
+
+$content = include_template('main.php',['posts' => $posts,'types'=>$types,]);
 $page = include_template('layout.php', ['content' => $content, 'page_name' => 'Главная страница','is_auth' => $is_auth, 'user_name' =>$user_name,]);
 print($page);

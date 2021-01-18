@@ -11,18 +11,18 @@ values ('post-quote','quote'),
 ('post-video','video');
 
 /*Вносим пользователей*/
-insert into user(email,username,password)
-values ('lyapinmsc+user1@gmail.com','Лариса','hashed_password123'),
-('lyapinmsc+user2@gmail.com','Владик','hashed_password321'),
-('lyapinmsc+user3@gmail.com','Виктор', 'hashedpassword123');
+insert into user(email,username,password,avatar)
+values ('lyapinmsc+user1@gmail.com','Лариса','hashed_password123','userpic-larisa-small.jpg'),
+('lyapinmsc+user2@gmail.com','Владик','hashed_password321','userpic.jpg'),
+('lyapinmsc+user3@gmail.com','Виктор', 'hashedpassword123','userpic-mark.jpg');
 
 /*Вносим список постов*/
-insert into post (header, content_text,content_media,user_id,content_type_id,views)
-values ('Цитата','Мы в жизни любим только раз, а после ищем лишь похожих',null,1,1,10),
-('Игра престолов','Не могу дождаться начала финального сезона своего любимого сериала!',null,2,2,40),
-('Наконец, обработал фотки!',null,'rock-medium.jpg',3,3,2),
-('Моя мечта',null,'coast-medium.jpg',1,3,49),
-('Лучшие курсы',null,'www.htmlacademy.ru',2,4,123);
+insert into post (header, content_text,content_media,user_id,content_type_id,views,cite_author,date_created)
+values ('Цитата','Мы в жизни любим только раз, а после ищем лишь похожих',null,1,1,10,'Неизвестный автор',default),
+('Игра престолов','Не могу дождаться начала финального сезона своего любимого сериала!',null,2,2,40,null,'2021-01-18 10:15:45'),
+('Наконец, обработал фотки!',null,'rock-medium.jpg',3,3,2,null,'2021-01-16 15:35:00'),
+('Моя мечта',null,'coast-medium.jpg',1,3,49,null,'2020-12-30 19:16:00'),
+('Лучшие курсы',null,'www.htmlacademy.ru',2,4,123,null,'2020-02-25 11:00:00');
 
 /*Добавляем комментарии*/
 insert into comment(content,user_id,post_id)
