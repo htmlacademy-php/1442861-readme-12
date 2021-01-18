@@ -1,10 +1,11 @@
 <?php
+
 return [
-    'db' => [
-        'db_host' => '',
-        'db_port' => '',
-        'db_user' => '',
-        'db_password' => '',
-        'db_database' => '',
+    'db' => [ //ВАЖНО! Не изменяйте порядок элементов массива db! Это нарушит работу кода.
+        'host' =>'localhost',
+        'username' => '',
+        'passwd' =>'',
+        'dbname' =>'readme',
+        'port' =>'',
     ],
 ];

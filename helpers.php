@@ -325,14 +325,13 @@ function time_ago ($val_date)
  * @return mysqli_stmt Возвращает результат исполнения подготовленного выражения
  */
 
-function sql_import (mysqli $db,string $sql_query, array $placeholders):mysqli_stmt
+function prepare_statement(mysqli $db, string $sql_query, array $placeholders): mysqli_stmt
 {
-$stmt = $db->prepare($sql_query);
-$phds_count = count($placeholders);
+    $stmt = $db->prepare($sql_query);
+    $phds_count = count($placeholders);
 
-$stmt->bind_param(str_repeat('s',$phds_count),...$placeholders);
-$stmt->execute ();
+    $stmt->bind_param(str_repeat('s', $phds_count), ...$placeholders);
+    $stmt->execute();
 
-return $stmt;
-
+    return $stmt;
 }
