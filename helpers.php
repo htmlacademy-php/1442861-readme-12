@@ -314,7 +314,7 @@ function time_ago ($val_date)
         $unit = $diff->i;
         $noun = get_noun_plural_form($unit, 'минута', 'минуты', 'минут');
     }
-    return $unit." ".$noun." назад";
+    return $unit." ".$noun;
        
 }
 
@@ -325,7 +325,7 @@ function time_ago ($val_date)
  * @return mysqli_stmt Возвращает результат исполнения подготовленного выражения
  */
 
-function prepare_statement(mysqli $db, string $sql_query, array $placeholders): mysqli_stmt
+function prepare_statement(mysqli $db, string $sql_query,...$placeholders): mysqli_stmt
 {
     $stmt = $db->prepare($sql_query);
     $phds_count = count($placeholders);

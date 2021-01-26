@@ -58,6 +58,33 @@ insert into like_post (user_id,post_id)
 values (1,2),
 (2,4);
 
-/*Добавляем подписку пользователя 2 на пользователя 2*/
+/*Добавляем несколько подписок пользовтелей друг на друга*/
 insert into subscription (user_id, subscriber_id)
-values(2,3);
+values(2,3),
+(2,1),
+(1,3);
+
+/*Добавляем несколько хэштегов*/
+insert into hashtag (name)
+values('cool'),
+('Круто'),
+('Хэштэг1'),
+('Мейнстрим');
+
+/*Привязываем хэштеги к постам*/
+insert into hashtag_post (post_id,hashtag_id)
+values(1,2),
+(2,3),
+(3,1),
+(3,4),
+(5,1),
+(2,2),
+(4,3);
+
+/*Вносим несколько репостов*/
+insert into repost (post_id,user_id)
+values(2,1),
+(3,2),
+(4,2),
+(4,1),
+(4,3);
