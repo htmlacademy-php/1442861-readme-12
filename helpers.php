@@ -132,7 +132,7 @@ function get_noun_plural_form(int $number, string $one, string $two, string $man
  */
 function include_template($name, array $data = [])
 {
-    $name = 'templates/' . $name;
+    $name = __DIR__.'\\templates\\' . $name;
     $result = '';
 
     ob_start();
@@ -334,4 +334,19 @@ function prepare_statement(mysqli $db, string $sql_query,...$placeholders): mysq
     $stmt->execute();
 
     return $stmt;
+}
+
+/**
+ * Выводит сообщение об ошибке запроса в теле страницы и останавливает сценарий 
+ * @param $message сообщение об ошибке, идентифицирующее неправильный запрос
+ * @param $wrong_var переменная, которая указана некорректно 
+ * @param $user_name имя пользователя для шапки страницы
+ */
+
+function call_404 ($message,$wrong_var,$user_name)  {
+
+    http_response_code(404);
+    $content = include_template('404.php', ['false_request' => $message.$wrong_var]);
+    $page = include_template('layout.php', ['content' => $content, 'page_name' => 'УПС','is_auth' => 1, 'user_name' =>$user_name,]);
+    return die ($page);
 }

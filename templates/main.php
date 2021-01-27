@@ -47,10 +47,10 @@
 
                         <?php foreach ($types as $type):?>
                         <li class="popular__filters-item filters__item">
-                            <?php if ($chosen_type === $type['id']):?>
-                            <a class="filters__button filters__button--<?=s($type['icon'])?>  button filters__button--active" href="index.php?content_type_id=<?=s($type['id'])?>">
+                            <?php if ($chosen_type === $type['type']):?>
+                            <a class="filters__button filters__button--<?=s($type['icon'])?>  button filters__button--active" href="?content_type=<?=s($type['type'])?>">
                             <?php else:?>
-                            <a class="filters__button filters__button--<?=s($type['icon'])?> button" href="index.php?content_type_id=<?=s($type['id'])?>">
+                            <a class="filters__button filters__button--<?=s($type['icon'])?> button" href="?content_type=<?=s($type['type'])?>">
                             <?php endif?>
                                 <span class="visually-hidden"><?=s($type['type'])?></span>
                                 <svg class="filters__icon" width="40%" height="40%">
@@ -69,7 +69,7 @@
 
                     <article class="popular__post post <?= s($post['type']) ?>">
                         <header class="post__header">
-                            <h2><a href = "post.php?id=<?=$post['id']?>"><?= s($post['header']) ?></a></h2>
+                            <h2><a href = "/post.php?id=<?=$post['id']?>"><?= s($post['header']) ?></a></h2>
                         </header>
 
                         <div class="post__main">
@@ -100,7 +100,7 @@
                             <?php elseif ($post['type'] === 'post-photo') : ?>
 
                                 <div class="post-photo__image-wrapper">
-                                    <img src="img/<?= s($post['content_media']) ?>" alt="Фото от пользователя" width="360" height="240">
+                                    <img src="/img/<?= s($post['content_media']) ?>" alt="Фото от пользователя" width="360" height="240">
                                 </div>
 
                             <?php else : ?>
@@ -120,7 +120,7 @@
                                 <a class="post__author-link" href="#" title="Автор">
                                     <div class="post__avatar-wrapper">
 
-                                        <img class="post__author-avatar" src="img/<?= s($post['avatar']) ?>" alt="Аватар пользователя">
+                                        <img class="post__author-avatar" src="/img/<?= s($post['avatar']) ?>" alt="Аватар пользователя">
                                     </div>
                                     <div class="post__info">
                                         <b class="post__author-name"><?= s($post['username']) ?></b>

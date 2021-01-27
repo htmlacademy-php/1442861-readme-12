@@ -1,22 +1,14 @@
 <?php
-require('init.php');
-require('helpers.php');
+require(__DIR__.'\\bootstrap.php');
 
-$config = require('config.php');
-$is_auth = rand(0, 1);
-$user_name = 'Alexey Lyapin'; // укажите здесь ваше имя
+$id = "";
 
-if(!isset($_GET['id'])){
-    http_response_code(404);
-    header("Location: no-results.html");
+if(isset($_GET['id'])){
+    $id = $_GET['id'];
+
 };
 
 
-mysqli_report(MYSQLI_REPORT_ERROR| MYSQLI_REPORT_STRICT);
-$db = new mysqli(...array_values($config['db']));
-$db->set_charset("utf8mb4");
-
-$id = $_GET['id'];
 
 $sql_post_info= 'SELECT post.id,post.date_created, header, type, content_text,cite_author,content_media,views,post.user_id as user_id,COUNT(repost.id) as repost_number, COUNT(DISTINCT like_post.id) as likes
     FROM post 
@@ -30,7 +22,11 @@ $sql_post_info= 'SELECT post.id,post.date_created, header, type, content_text,ci
 
 $post_info = prepare_statement($db,$sql_post_info,$id)->get_result()->fetch_all(MYSQLI_ASSOC);
 
-$sql_author= 'SELECT user.id,username,reg_date,avatar, COUNT(p.id) as post_number, COUNT(s.id) as subscribers
+if (count($post_info) === 0) {
+    call_404("Пост с id = ",$id,$user_name);
+    };
+
+$sql_author = 'SELECT user.id,username,reg_date,avatar, COUNT(p.id) as post_number, COUNT(s.id) as subscribers
 
     FROM user 
     JOIN post p ON user.id = p.user_id 
