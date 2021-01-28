@@ -69,7 +69,7 @@
 
                     <article class="popular__post post <?= s($post['type']) ?>">
                         <header class="post__header">
-                            <h2><a href = "/post.php?id=<?=$post['id']?>"><?= s($post['header']) ?></a></h2>
+                            <h2><a href = "/post.php?id=<?=s($post['id'])?>"><?= s($post['header']) ?></a></h2>
                         </header>
 
                         <div class="post__main">

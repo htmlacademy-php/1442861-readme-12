@@ -1,18 +1,15 @@
 <?php
-require(__DIR__.'\\bootstrap.php');
+require(__DIR__.'/bootstrap.php');
 
 
 
 $sql_types = 'select type,icon from content_type';
 $types = $db->query($sql_types)->fetch_all(MYSQLI_ASSOC);
 
-$chosen_type = "";
-if (isset($_GET['content_type'])) {
-    $chosen_type = $_GET['content_type'];
-};
+$chosen_type = $_GET['content_type'] ?? "";
 
-if (!in_array($chosen_type, array_column($types, 'type'), true) and $chosen_type != "") {
-    call_404("посты с типом",$chosen_type,$user_name);
+if (!in_array($chosen_type, array_column($types, 'type'), true) and $chosen_type) {
+    call_404("Посты с типом '".$chosen_type."' не найдены",$user_name,$is_auth);
 };
 
 $sql_posts = 'SELECT post.id,post.date_created, header, type, 
@@ -26,7 +23,7 @@ $sql_posts = 'SELECT post.id,post.date_created, header, type,
         where type = ? OR ?=""
         GROUP BY (post.id)
         ORDER BY views DESC LIMIT 6';
-$posts = prepare_statement($db, $sql_posts, $chosen_type, $chosen_type)->get_result()->fetch_all(MYSQLI_ASSOC);
+$posts = prepare_statement($db, $sql_posts, [$chosen_type, $chosen_type])->get_result()->fetch_all(MYSQLI_ASSOC);
 
 
 $content = include_template('main.php', ['posts' => $posts, 'types' => $types, 'chosen_type' => $chosen_type,]);

@@ -132,7 +132,7 @@ function get_noun_plural_form(int $number, string $one, string $two, string $man
  */
 function include_template($name, array $data = [])
 {
-    $name = __DIR__.'\\templates\\' . $name;
+    $name = __DIR__.'/templates/' . $name;
     $result = '';
 
     ob_start();
@@ -325,7 +325,7 @@ function time_ago ($val_date)
  * @return mysqli_stmt Возвращает результат исполнения подготовленного выражения
  */
 
-function prepare_statement(mysqli $db, string $sql_query,...$placeholders): mysqli_stmt
+function prepare_statement(mysqli $db, string $sql_query,array $placeholders): mysqli_stmt
 {
     $stmt = $db->prepare($sql_query);
     $phds_count = count($placeholders);
@@ -343,10 +343,10 @@ function prepare_statement(mysqli $db, string $sql_query,...$placeholders): mysq
  * @param $user_name имя пользователя для шапки страницы
  */
 
-function call_404 ($message,$wrong_var,$user_name)  {
+function call_404 ($message,$user_name,$is_auth)  {
 
     http_response_code(404);
-    $content = include_template('404.php', ['false_request' => $message.$wrong_var]);
-    $page = include_template('layout.php', ['content' => $content, 'page_name' => 'УПС','is_auth' => 1, 'user_name' =>$user_name,]);
-    return die ($page);
+    $content = include_template('404.php', ['false_request' => $message,]);
+    $page = include_template('layout.php', ['content' => $content, 'page_name' => 'УПС','is_auth' => $is_auth, 'user_name' =>$user_name,]);
+    die ($page);
 }

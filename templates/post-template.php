@@ -1,10 +1,10 @@
 <main class="page__main page__main--publication">
     <div class="container">
-        <h1 class="page__title page__title--publication"><?= $post_info['header'] ?></h1>
+        <h1 class="page__title page__title--publication"><?= s($post_info['header']) ?></h1>
         <section class="post-details">
             <h2 class="visually-hidden">Публикация</h2>
 
-            <div class="post-details__wrapper <?= $post_info['type'] ?>">
+            <div class="post-details__wrapper <?= s($post_info['type']) ?>">
                 <div class="post-details__main-block post post--details">
 
 
@@ -78,7 +78,7 @@
                     </div>
                     <ul class="post__tags">
                         <?php foreach ($hashtags as $hashtag) : ?>
-                            <li><a href="#">#<?= s($hashtag['name']) ?></a></li>
+                            <li><a href="#&hashtag=<?=s($hashtag['name'])?>">#<?= s($hashtag['name']) ?></a></li>
                         <?php endforeach ?>
                     </ul>
                     <div class="comments">
@@ -86,14 +86,10 @@
                             <div class="comments__my-avatar">
                                 <img class="comments__picture" src="img/userpic.jpg" alt="Аватар пользователя">
                             </div>
-                            <div class="form__input-section form__input-section--error">
+                            <div class="form__input-section ">
                                 <textarea class="comments__textarea form__textarea form__input" placeholder="Ваш комментарий"></textarea>
                                 <label class="visually-hidden">Ваш комментарий</label>
-                                <button class="form__error-button button" type="button">!</button>
-                                <div class="form__error-text">
-                                    <h3 class="form__error-title">Ошибка валидации</h3>
-                                    <p class="form__error-desc">Это поле обязательно к заполнению</p>
-                                </div>
+
                             </div>
                             <button class="comments__submit button button--green" type="submit">Отправить</button>
                         </form>
