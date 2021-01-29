@@ -36,14 +36,22 @@
                     <b class="popular__filters-caption filters__caption">Тип контента:</b>
                     <ul class="popular__filters-list filters__list">
                         <li class="popular__filters-item popular__filters-item--all filters__item filters__item--all">
-                            <a class="filters__button filters__button--ellipse filters__button--all filters__button--active" href="#">
+                            <?php if ($chosen_type === null):?>
+                            <a class="filters__button filters__button--ellipse filters__button--all filters__button--active" href="index.php">
+                            <?php else:?>
+                            <a class="filters__button filters__button--ellipse filters__button--all" href="index.php">
+                            <?php endif?>
                                 <span>Все</span>
                             </a>
                         </li>
 
                         <?php foreach ($types as $type):?>
                         <li class="popular__filters-item filters__item">
-                            <a class="filters__button filters__button--<?=s($type['icon'])?> button" href="#">
+                            <?php if ($chosen_type === $type['type']):?>
+                            <a class="filters__button filters__button--<?=s($type['icon'])?>  button filters__button--active" href="?content_type=<?=s($type['type'])?>">
+                            <?php else:?>
+                            <a class="filters__button filters__button--<?=s($type['icon'])?> button" href="?content_type=<?=s($type['type'])?>">
+                            <?php endif?>
                                 <span class="visually-hidden"><?=s($type['type'])?></span>
                                 <svg class="filters__icon" width="40%" height="40%">
                                     <use xlink:href="#icon-filter-<?=s($type['icon'])?>"></use>
@@ -61,7 +69,7 @@
 
                     <article class="popular__post post <?= s($post['type']) ?>">
                         <header class="post__header">
-                            <h2><?= s($post['header']) ?></h2>
+                            <h2><a href = "/post.php?id=<?=s($post['id'])?>"><?= s($post['header']) ?></a></h2>
                         </header>
 
                         <div class="post__main">
@@ -92,7 +100,7 @@
                             <?php elseif ($post['type'] === 'post-photo') : ?>
 
                                 <div class="post-photo__image-wrapper">
-                                    <img src="img/<?= s($post['content_media']) ?>" alt="Фото от пользователя" width="360" height="240">
+                                    <img src="/img/<?= s($post['content_media']) ?>" alt="Фото от пользователя" width="360" height="240">
                                 </div>
 
                             <?php else : ?>
@@ -112,11 +120,11 @@
                                 <a class="post__author-link" href="#" title="Автор">
                                     <div class="post__avatar-wrapper">
 
-                                        <img class="post__author-avatar" src="img/<?= s($post['avatar']) ?>" alt="Аватар пользователя">
+                                        <img class="post__author-avatar" src="/img/<?= s($post['avatar']) ?>" alt="Аватар пользователя">
                                     </div>
                                     <div class="post__info">
                                         <b class="post__author-name"><?= s($post['username']) ?></b>
-                                        <time class="post__time" datetime="<?=s($post['date_created'])?>" title = "<?=s(date('d.m.Y H:i',strtotime(s($post['date_created']))))?>"><?= s(time_ago($post['date_created']))?></time>
+                                        <time class="post__time" datetime="<?=s($post['date_created'])?>" title = "<?=s(date('d.m.Y H:i',strtotime(s($post['date_created']))))?>"><?= s(time_ago($post['date_created']))?> назад</time>
                                     </div>
                                 </a>
                             </div>
@@ -129,14 +137,14 @@
                                         <svg class="post__indicator-icon post__indicator-icon--like-active" width="20" height="17">
                                             <use xlink:href="#icon-heart-active"></use>
                                         </svg>
-                                        <span><?=s($post['views'])?></span>
+                                        <span><?=s($post['likes'])?></span>
                                         <span class="visually-hidden">количество лайков</span>
                                     </a>
                                     <a class="post__indicator post__indicator--comments button" href="#" title="Комментарии">
                                         <svg class="post__indicator-icon" width="19" height="17">
                                             <use xlink:href="#icon-comment"></use>
                                         </svg>
-                                        <span>0</span>
+                                        <span><?=s($post['comments_number'])?></span>
                                         <span class="visually-hidden">количество комментариев</span>
                                     </a>
                                 </div>

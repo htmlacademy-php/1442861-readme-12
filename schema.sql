@@ -230,6 +230,33 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4;
 
 
+-- -----------------------------------------------------
+-- Table `readme`.`repost`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `readme`.`repost` ;
+
+CREATE TABLE IF NOT EXISTS `readme`.`repost` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `post_id` INT(11) NOT NULL,
+  `user_id` INT(11) NOT NULL,
+  `date_created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  INDEX `fk_post_has_user_user1_idx` (`user_id` ASC),
+  INDEX `fk_post_has_user_post1_idx` (`post_id` ASC),
+  PRIMARY KEY (`id`),
+  CONSTRAINT `fk_post_has_user_post1`
+    FOREIGN KEY (`post_id`)
+    REFERENCES `readme`.`post` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_post_has_user_user1`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `readme`.`user` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
